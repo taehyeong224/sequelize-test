@@ -1,7 +1,7 @@
 {
-  "name": "inversify-express-example",
+  "name": "sequelize-test",
   "version": "1.0.0",
-  "description": "Examples for using inversify with expressjs",
+  "description": "sequelize-test",
   "author": "lholznagel",
   "license": "MIT",
   "scripts": {
