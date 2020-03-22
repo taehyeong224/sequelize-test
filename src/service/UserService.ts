@@ -5,10 +5,14 @@ import { User } from '../Entity/User';
 
 @injectable()
 export class UserService {
-
     @inject(TYPES.UserDao) private userDao: UserDao;
 
     public async getTestByIdx(idx: number): Promise<User> {
         return this.userDao.findOneById(idx);
     }
+
+    public getAll(): PromiseLike<User[]> {
+        return this.userDao.findAll();
+    }
+
 }

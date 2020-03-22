@@ -8,10 +8,20 @@ import { errorHandle } from "../util/util";
 import { checkToken } from "../middleware/token";
 import { User } from '../Entity/User';
 
-@controller('/')
+@controller('/user')
 export class TestController {
 
     constructor(@inject(TYPES.UserService) private userService: UserService) {}
+
+    @httpGet('/')
+    public async getall(request: express.Request, response: express.Response) {
+        try {
+            const users: User[] = await this.userService.getAll();
+            response.status(200).json(users);
+        } catch (e) {
+            errorHandle(e, response)
+        }
+    }
 
     @httpGet('/:id')
     public async someGet(request: express.Request, response: express.Response) {

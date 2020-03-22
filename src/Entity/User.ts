@@ -1,4 +1,4 @@
-import { Model, STRING, INTEGER } from "sequelize/types";
+import { Model, STRING, INTEGER } from "sequelize";
 import {sequelize} from "../config/Mariadb"
 
 export class User extends Model {}
