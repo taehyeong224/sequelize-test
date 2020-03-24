@@ -1,7 +1,7 @@
 import { controller, httpDelete, httpGet, httpPost, httpPut } from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { UserService } from '../service/UserService';
-import * as express from 'express';
+import {Request, Response} from 'express';
 import TYPES from '../constant/types';
 import { errorHandle } from "../util/util";
 // import { checkContentType } from "../middleware/contentType";
@@ -14,7 +14,7 @@ export class TestController {
     constructor(@inject(TYPES.UserService) private userService: UserService) {}
 
     @httpGet('/')
-    public async getall(request: express.Request, response: express.Response) {
+    public async getall(request: Request, response: Response) {
         try {
             const users: User[] = await this.userService.getAll();
             response.status(200).json(users);
@@ -24,9 +24,9 @@ export class TestController {
     }
 
     @httpGet('/:id')
-    public async someGet(request: express.Request, response: express.Response) {
+    public async someGet(request: Request, response: Response) {
         try {
-            const user: User = await this.userService.getTestByIdx(request.params.id);
+            const user: User = await this.userService.getTestByIdx(Number(request.params.id));
             response.status(200).json(user);
         } catch (e) {
             errorHandle(e, response)
@@ -34,7 +34,7 @@ export class TestController {
     }
 
     @httpPost('/')
-    public async somePost(request: express.Request, response: express.Response) {
+    public async somePost(request: Request, response: Response) {
         try {
             response.status(201).json({ msg: "success" });
         } catch (e) {
@@ -43,7 +43,7 @@ export class TestController {
     }
 
     @httpPut('/', checkToken)
-    public async somePut(request: any, response: express.Response) {
+    public async somePut(request: any, response: Response) {
         try {
             response.status(200).json({ msg: "success" });
         } catch (e) {
@@ -53,7 +53,7 @@ export class TestController {
     }
 
     @httpDelete('/:id', checkToken)
-    public async someDelete(request: express.Request, response: express.Response) {
+    public async someDelete(request: Request, response: Response) {
         try {
             response.status(204).json({});
         } catch (e) {

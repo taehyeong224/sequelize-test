@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { ApolloServer, gql } from 'apollo-server';
 import * as cors from 'cors';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { Container } from 'inversify';
@@ -17,6 +18,41 @@ const container = new Container();
 container.bind<UserService>(TYPES.UserService).to(UserService).inRequestScope();
 container.bind<AbstractDao<User>>(TYPES.UserDao).to(UserDao).inSingletonScope();
 
+// A schema is a collection of type definitions (hence "typeDefs")
+// that together define the "shape" of queries that are executed against
+// your data.
+const typeDefs = gql`
+type Book {
+    title: String
+    author: String
+}
+type Query {
+    books: [Book]
+}
+`;
+const books = [
+    {
+        title: 'Harry Potter and the Chamber of Secrets',
+        author: 'J.K. Rowling',
+    },
+    {
+        title: 'Jurassic Park',
+        author: 'Michael Crichton',
+    },
+];
+
+const resolvers = {
+    Query: {
+        books: () => books,
+    },
+};
+
+const apollerServer = new ApolloServer({ typeDefs, resolvers });
+
+// The `listen` method launches a web server.
+apollerServer.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`);
+});
 // start the server
 const server: InversifyExpressServer = new InversifyExpressServer(container);
 
